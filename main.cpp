@@ -8,11 +8,13 @@
 #include <iostream>
 #include <fstream>
 //Cursor moving function prototypes
-int moveRight(int x, int maxX);
+int moveRight(int x);
 int moveLeft(int x);
-int moveDown(int y, int maxY);
+int moveDown(int y);
 int moveUp(int y);
 
+int xCounter = 0;
+int yCounter = 0;
 
 
 int main()
@@ -22,21 +24,17 @@ int main()
     WINDOW* macWin = NULL;
 
     WINDOW *getwin(FILE *MacroFile);
+    int xWin = 260;
+    int yWin = 180;
 
-    //Scrolling mechanisms
-//    int scroll(WINDOW *macwin);
 
-//    int scrl(int n);
 
-    //int wscrl(WINDOW *macwin, int n);
-    //stdscr->scrollok(true);
-//mypad = CURSES.newpad(40,60);
 
-    std::vector<char> charVec;
+
 
 
     using namespace std;
-
+    std::vector<char> charVec;
     string fName;
     char cLine;
 
@@ -44,7 +42,7 @@ int main()
     std::cout<< "Enter a file name: ";
     cin>>fName;
     //string  fName = "MacroFile";
-    string line;
+    string line;//line by line
     string pLine; //print line
     char quit;//determines whether to quit the program or not
     ifstream iData;
@@ -59,22 +57,21 @@ int main()
 
     iData.open(fName.c_str());
 
-    while(iData.good())
+
+    if (iData.good())
     {
-        getline(iData, line);
-        strVec.push_back(line);
+        while(iData.good()) //writes file to screen
+        {
+            getline(iData, line);
+            strVec.push_back(line);
+            //charVec.push_back(cLine);
 
-
-
-
-        //charVec.push_back(cLine);
-
-
-
-
-
-    }//end while
-
+        }//end while
+    }
+    else
+    {
+        strVec.push_back("");
+    }
     for(int i = 0; i < strVec.size(); i++)
     {
 
@@ -87,12 +84,9 @@ int main()
 
 
     //Set the heigh and width of the window
-    int nHeight = 0;
-    int nWidth = 0;
-    macWin = newwin(nHeight, nWidth, y, x);
+    macWin = newwin(180, 180, y, x);
 
-    nHeight = getmaxy(stdscr);
-    nWidth = getmaxx(stdscr);
+
 
 
 
@@ -129,21 +123,15 @@ int main()
         wmove(macWin, y, x);
         if(cursPos == KEY_DOWN)
         {
-            y = moveDown(y, nHeight);
-            if(cursPos<y)
-            {
-                scroll(macWin);
-            }
+            y = moveDown(y);
+
 
 
         }
         else if(cursPos == KEY_UP)
         {
             y = moveUp(y);
-            if(cursPos>y)
-            {
-                scroll(macWin);
-            }
+
 
 
         }
@@ -153,36 +141,37 @@ int main()
         }
         else if(cursPos == KEY_RIGHT)
         {
-            x = moveRight(x, nWidth);
+            x = moveRight(x);
         }
         else if(cursPos == KEY_BACKSPACE)
         {
-            x = moveLeft(x);
-            wdelch(macWin);
-            charVec.pop_back();
+
+
+            for(int i = 0; i<strVec.size(); i++)
+            {
+
+                for (int j = 0; j<strVec.at(i).length(); j++)
+                {
+
+                    strVec[i] = " ";
+                    wrefresh(macWin);
+                    x = moveLeft(x);
+                    //x = moveRight(x);
+                }
+            }
             //x = moveLeft(x);
         }
         else if (cursPos == '!')
         {
             break;
         }
-        else if (cursPos == KEY_NPAGE)
-        {
-            scrollok(macWin,true);
-            refresh();
-        }
-        else if (cursPos == KEY_PPAGE)
-        {
-            scrollok(macWin,true);
-            refresh();
-        }
         else if (cursPos == '5')
         {
-            for (int i = 0; i<= charVec.size(); i++)
+            for (int i = 0; i<= strVec.size(); i++)
             {
-                unsigned int x = charVec.capacity();
+
                 ofstream ofs("output.txt", ofstream::app);
-                ofs << charVec[i];
+                ofs << strVec[i];
             }
             break;
         }
@@ -190,38 +179,62 @@ int main()
         {
             waddch(macWin,'\n');
             charVec.push_back(cursPos);
-            y = moveDown(y, nHeight);
+            y = moveDown(y);
             x = 0;
         }
         else
         {
-            waddch(macWin, cursPos);
-            charVec.push_back(cursPos);
-            x = moveRight(x, nWidth);
+
+
+
+            strVec.at(y).insert(x, 1, cursPos);
+            wclear(macWin);
+            for(int i = 0; i<strVec.size(); i++)
+            {
+
+                for (int j = 0; j<strVec.at(i).length(); j++)
+                {
+
+                    mvwaddch(macWin, i, j, strVec.at(i).at(j));
+                    wrefresh(macWin);
+                    //x = moveRight(x);
+                }
+
+                // pLine = charVec[i];
+
+
+
+                // waddstr(macWin, const_cast<char *>(pLine.c_str()));
+                // charVec.pop_back();
+
+
+            }
+
+
+
         }
 
-        wrefresh(macWin);
+        //printw("Hello World");
+
+        //wgetch(macWin);//waits for character input
+
 
     }
 
-    //printw("Hello World");
 
-    //wgetch(macWin);//waits for character input
     endwin();
     return 0;
-
-
-
 }//end main
 
 
 //Cursor moving functions
-int moveRight(int x, int MX)
+int moveRight(int x)
 {
     int temp = x;
-    if(temp + 1 < MX)
+    if(temp + 1 < 180)
     {
         x++;
+
     }
     return x;
 
@@ -232,16 +245,18 @@ int moveLeft(int x)
     if(temp - 1 >= 0)
     {
         x--;
+
     }
 
     return x;
 }
-int moveDown(int y, int MY)
+int moveDown(int y)
 {
     int temp = y;
-    if(temp + 1 < MY)
+    if(temp + 1 < 180)
     {
         y++;
+
     }
     return y;
 }
@@ -252,6 +267,7 @@ int moveUp(int y)
     if(temp - 1 >= 0)
     {
         y--;
+
     }
     return y;
 
