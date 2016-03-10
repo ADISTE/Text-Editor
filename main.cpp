@@ -174,8 +174,9 @@ int main()
                 ofs.open("output.txt");
                 if(ofs.is_open())
                 {
-                    ofs << strVec[i];
-                    ofs << '\n';
+                    ofs << strVec.size();
+                    //ofs << '\n';
+                    //ofs << i;
                 }
 
             }
