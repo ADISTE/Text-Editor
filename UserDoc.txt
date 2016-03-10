@@ -1,0 +1,43 @@
+User Manual
+-------------------------------------------------------------------------------------
+I. Editor Functions
+II. Navigating the editor
+III. Exiting the editor
+IV. Saving changes
+V. Keyboard Commands	
+-------------------------------------------------------------------------------------
+I: Editor Functions
+-------------------------------------------------------------------------------------
+
+The text editor was designed with these fundamental features in mind:
+ 1. Allowing the user to create new or edit existing text documents.
+ 2. Allowing the user to scroll through the document and make insertions or deletions
+ 3. Allowing the user to save these changes to the text document if desired.
+-------------------------------------------------------------------------------------
+
+
+II: Navigating the editor 
+-------------------------------------------------------------------------------------
+Navigating the cursor in the text editor is done by the use of the arrow keys on the keyboard. The enter key is used to move the cursor to the next line. Users can scroll up and down the document by using the arrow keys on the keyboard. 
+-------------------------------------------------------------------------------------
+
+
+III: Exiting the editor
+-------------------------------------------------------------------------------------
+The editor can be exited by typing the "!" character on the keyboard.
+-------------------------------------------------------------------------------------
+
+
+IV: Saving Changes
+-------------------------------------------------------------------------------------
+The user has the option of saving changes when they exit the program by hitting the '5' key.
+Changes will be outputted to a new file.
+-------------------------------------------------------------------------------------
+
+
+V: Keyboard Commands
+-------------------------------------------------------------------------------------
+! - Used to exit the program (currently)
+Backspace - Used to remove the character before the cursor
+Arrow Keys - Used to move the cursor position in the editor
+Enter - Used to move the cursor to a new line.
